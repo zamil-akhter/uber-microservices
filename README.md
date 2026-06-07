@@ -67,26 +67,6 @@ cd ../gateway
 npm run dev
 ```
 
-## Environment variables
-
-Each service has a local `.env` file.
-
-### users/.env
-
-```text
-PORT=3001
-MONGO_URI=mongodb://127.0.0.1:27017/uber-microservices-users
-JWT_SECRET=supersecretjwtkeyforuberusersservice
-```
-
-### captains/.env
-
-```text
-PORT=3002
-MONGO_URI=mongodb://127.0.0.1:27017/uber-microservices-captains
-JWT_SECRET=supersecretjwtkeyforubercaptainsservice
-```
-
 ## Notes
 
 - The gateway proxies requests to the backend services and keeps the API surface consistent.
