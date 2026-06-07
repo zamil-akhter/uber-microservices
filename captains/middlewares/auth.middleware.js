@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import Captain from "../models/captain.model.js";
+import BlacklistToken from "../models/blacklistToken.model.js";
 
 export const authenticateCaptain = async (req, res, next) => {
   try {
@@ -13,6 +14,14 @@ export const authenticateCaptain = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
+    const isBlacklisted = await BlacklistToken.find({ token });
+    if (isBlacklisted.length) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const captain = await Captain.findById(decoded._id);
     if (!captain) {
@@ -23,6 +32,7 @@ export const authenticateCaptain = async (req, res, next) => {
     }
 
     req.captain = captain;
+    req.token = token;
     next();
   } catch (error) {
     return res.status(401).json({

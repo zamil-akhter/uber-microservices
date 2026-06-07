@@ -1,4 +1,5 @@
 import * as captainService from "../services/captain.service.js";
+import BlacklistToken from "../models/blacklistToken.model.js";
 
 export const signup = async (req, res) => {
   try {
@@ -58,6 +59,30 @@ export const login = async (req, res) => {
     res.status(401).json({
       success: false,
       message: error.message || "Invalid email or password",
+    });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    const token = req.token;
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Token not found in request",
+      });
+    }
+
+    await BlacklistToken.create({ token });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Logout failed",
     });
   }
 };
