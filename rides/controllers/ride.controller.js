@@ -1,16 +1,14 @@
 const rideModel = require("../models/ride.model");
 
-const createRide = (req, res, next) => {
+const createRide = async (req, res, next) => {
   const { user } = req;
   const { pickup, destination } = req.body;
 
-  const newRide = new rideModel({
+  const newRide = await rideModel.create({
     user: user._id,
     pickup,
     destination
   });
-
-  newRide.save();
 
   res.status(201).json({ message: "Ride created successfully", ride: newRide });
 }
