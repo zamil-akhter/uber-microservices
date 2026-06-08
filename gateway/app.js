@@ -17,6 +17,13 @@ app.use(
   }),
 );
 
+app.use(
+  "/api/rides",
+  proxy("http://localhost:3003", {
+    proxyReqPathResolver: (req) => req.originalUrl,
+  }),
+);
+
 app.listen(3000, () => {
   console.log("Gateway is running on http://localhost:3000");
 });
