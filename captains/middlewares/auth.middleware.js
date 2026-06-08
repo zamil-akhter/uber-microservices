@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
-import Captain from "../models/captain.model.js";
-import BlacklistToken from "../models/blacklistToken.model.js";
+const jwt = require('jsonwebtoken');
+const Captain = require('../models/captain.model');
+const BlacklistToken = require('../models/blacklistToken.model');
 
-export const authenticateCaptain = async (req, res, next) => {
+const authenticateCaptain = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -41,3 +41,5 @@ export const authenticateCaptain = async (req, res, next) => {
     });
   }
 };
+
+module.exports = { authenticateCaptain };

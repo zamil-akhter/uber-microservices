@@ -1,9 +1,11 @@
-import express from "express";
-
+const express = require("express");
+const rideRoutes = require("./routes/ride.routes");
 const app = express();
 
+// Middleware
 app.use(express.json());
 
+// Basic health check endpoint
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "UP",
@@ -12,4 +14,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-export default app;
+// Mounting ride routes
+app.use('/api/rides', rideRoutes);
+
+module.exports = app;

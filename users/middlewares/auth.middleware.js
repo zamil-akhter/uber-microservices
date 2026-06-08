@@ -1,11 +1,11 @@
-import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
-import BlacklistToken from "../models/blacklistToken.model.js";
+const jwt = require('jsonwebtoken');
+const User = require('../models/user.model');
+const BlacklistToken = require('../models/blacklistToken.model');
 
 /**
  * Middleware to authenticate requests using JWT tokens
  */
-export const authenticateUser = async (req, res, next) => {
+const authenticateUser = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -44,3 +44,5 @@ export const authenticateUser = async (req, res, next) => {
     });
   }
 };
+
+module.exports = { authenticateUser };

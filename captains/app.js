@@ -1,5 +1,5 @@
-import express from "express";
-import captainRoutes from "./routes/captain.routes.js";
+const express = require('express');
+const captainRoutes = require('./routes/captain.routes');
 
 const app = express();
 
@@ -18,4 +18,4 @@ app.get("/health", (req, res) => {
 // Mounting captain routes
 app.use("/api/captains", captainRoutes);
 
-export default app;
+module.exports = app;

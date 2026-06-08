@@ -1,9 +1,20 @@
-// Ride controller placeholders
+const rideModel = require("../models/ride.model");
 
-export const getAllRides = async (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Rides endpoint is not yet implemented",
-    data: [],
+const createRide = (req, res, next) => {
+  const { user } = req;
+  const { pickup, destination } = req.body;
+
+  const newRide = new rideModel({
+    user: user._id,
+    pickup,
+    destination
   });
+
+  newRide.save();
+
+  res.status(201).json({ message: "Ride created successfully", ride: newRide });
+}
+
+module.exports = {
+  createRide
 };

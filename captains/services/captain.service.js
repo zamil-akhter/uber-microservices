@@ -1,8 +1,8 @@
-import Captain from "../models/captain.model.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+const Captain = require('../models/captain.model');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-export const registerCaptain = async ({ fullName, email, password }) => {
+exports.registerCaptain = async ({ fullName, email, password }) => {
   const existingCaptain = await Captain.findOne({ email });
   if (existingCaptain) {
     throw new Error("Captain already exists with this email");
@@ -13,7 +13,7 @@ export const registerCaptain = async ({ fullName, email, password }) => {
   return captain;
 };
 
-export const loginCaptain = async ({ email, password }) => {
+exports.loginCaptain = async ({ email, password }) => {
   const captain = await Captain.findOne({ email }).select("+password");
   if (!captain) {
     throw new Error("Invalid email or password");

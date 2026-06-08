@@ -1,10 +1,10 @@
-import * as userService from "../services/user.service.js";
-import BlacklistToken from "../models/blacklistToken.model.js";
+const userService = require('../services/user.service');
+const BlacklistToken = require('../models/blacklistToken.model');
 
 /**
  * Controller to handle User Registration (Signup)
  */
-export const signup = async (req, res) => {
+const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
@@ -37,7 +37,7 @@ export const signup = async (req, res) => {
 /**
  * Controller to handle User Login
  */
-export const login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -68,7 +68,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+const logout = async (req, res) => {
   try {
     const token = req.token;
     if (!token) {
@@ -95,7 +95,7 @@ export const logout = async (req, res) => {
 /**
  * Controller to retrieve user profile (secured)
  */
-export const getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res) => {
   try {
     // req.user is populated by the authentication middleware
     res.status(200).json({
@@ -115,3 +115,5 @@ export const getUserProfile = async (req, res) => {
     });
   }
 };
+
+module.exports = { signup, login, logout, getUserProfile };

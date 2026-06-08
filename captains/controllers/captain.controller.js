@@ -1,7 +1,7 @@
-import * as captainService from "../services/captain.service.js";
-import BlacklistToken from "../models/blacklistToken.model.js";
+const captainService = require('../services/captain.service');
+const BlacklistToken = require('../models/blacklistToken.model');
 
-export const signup = async (req, res) => {
+const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
 
@@ -32,7 +32,7 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -63,7 +63,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+const logout = async (req, res) => {
   try {
     const token = req.token;
     if (!token) {
@@ -87,7 +87,7 @@ export const logout = async (req, res) => {
   }
 };
 
-export const getCaptainProfile = async (req, res) => {
+const getCaptainProfile = async (req, res) => {
   try {
     res.status(200).json({
       success: true,
@@ -106,3 +106,5 @@ export const getCaptainProfile = async (req, res) => {
     });
   }
 };
+
+module.exports = { signup, login, logout, getCaptainProfile };

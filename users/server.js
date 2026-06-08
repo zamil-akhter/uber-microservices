@@ -1,6 +1,6 @@
-import dotenv from 'dotenv';
-import app from './app.js';
-import { connectDB } from './dbs/db.js';
+const dotenv = require('dotenv');
+const app = require('./app');
+const { connectDB } = require('./dbs/db');
 
 // Load environment variables
 dotenv.config();

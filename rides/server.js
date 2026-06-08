@@ -1,10 +1,21 @@
-import dotenv from "dotenv";
-import app from "./app.js";
+const dotenv = require("dotenv");
+const app = require("./app");
+const { connectDB } = require("./dbs/db");
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3003;
 
-app.listen(PORT, () => {
-  console.log(`[Rides Service] Running on http://localhost:${PORT}`);
-});
+const start = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`[Rides Service] Running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("[Rides Service] Failed to start:", error);
+    process.exit(1);
+  }
+};
+
+start();

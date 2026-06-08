@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * Establish connection to MongoDB database
  */
-export const connectDB = async () => {
+exports.connectDB = async () => {
   const mongoUri = process.env.MONGO_URI;
   console.log(`[Database] Connecting to MongoDB at ${mongoUri}...`);
 

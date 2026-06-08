@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const captainSchema = new mongoose.Schema(
   {
@@ -28,4 +28,4 @@ const captainSchema = new mongoose.Schema(
 
 const Captain = mongoose.model("Captain", captainSchema);
 
-export default Captain;
+module.exports = Captain;

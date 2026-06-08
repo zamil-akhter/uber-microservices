@@ -1,8 +1,10 @@
-import express from "express";
-import { getAllRides } from "../controllers/ride.controller.js";
-
+const express = require("express");
+const authMiddleware = require("../middlewares/auth.middleware");
 const router = express.Router();
+const rideController = require("../controllers/ride.controller");
 
-router.get("/", getAllRides);
 
-export default router;
+
+router.post("/create-ride", authMiddleware, rideController.createRide);
+
+module.exports = router;
