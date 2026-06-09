@@ -27,3 +27,5 @@ exports.loginCaptain = async ({ email, password }) => {
   const token = jwt.sign({ _id: captain._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
   return { captain, token };
 };
+
+

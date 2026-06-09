@@ -2,6 +2,36 @@ const captainService = require('../services/captain.service');
 const BlacklistToken = require('../models/blacklistToken.model');
 const { subscribeToQueue } = require('../services/rabbit');
 
+const pendingRidePolls = [];
+const rideBuffer = [];
+
+function deliverRideToPendingPolls(ride) {
+  if (!pendingRidePolls.length) {
+    return false;
+  }
+
+  const pending = pendingRidePolls.splice(0, pendingRidePolls.length);
+  pending.forEach(({ res, timeout }) => {
+    clearTimeout(timeout);
+    if (!res.headersSent) {
+      res.json({ success: true, ride });
+    }
+  });
+
+  return true;
+}
+
+subscribeToQueue('ride_created', (data) => {
+  const ride = typeof data === 'string' ? JSON.parse(data) : data;
+
+  if (!deliverRideToPendingPolls(ride)) {
+    rideBuffer.push(ride);
+    if (rideBuffer.length > 10) {
+      rideBuffer.shift();
+    }
+  }
+});
+
 const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
@@ -108,9 +138,32 @@ const getCaptainProfile = async (req, res) => {
   }
 };
 
-subscribeToQueue("ride_created", (data) => {
-  console.log("[TCL] --------- ~ data --------->>>>  ", JSON.parse(data))
+const pollNewRide = (req, res) => {
+  if (rideBuffer.length) {
+    const ride = rideBuffer.shift();
+    return res.json({ success: true, ride });
+  }
 
-});
+  const timeout = setTimeout(() => {
+    const index = pendingRidePolls.findIndex((item) => item.res === res);
+    if (index !== -1) {
+      pendingRidePolls.splice(index, 1);
+    }
+    if (!res.headersSent) {
+      res.status(200).json({ success: false, message: 'No new ride available' });
+    }
+  }, 30000);
 
-module.exports = { signup, login, logout, getCaptainProfile };
+  pendingRidePolls.push({ res, timeout });
+  req.on('close', () => {
+    const index = pendingRidePolls.findIndex((item) => item.res === res);
+    if (index !== -1) {
+      clearTimeout(pendingRidePolls[index].timeout);
+      pendingRidePolls.splice(index, 1);
+    }
+  });
+};
+
+
+
+module.exports = { signup, login, logout, getCaptainProfile, pollNewRide };
