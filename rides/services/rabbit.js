@@ -1,7 +1,6 @@
 const amqp = require('amqplib');
 
 const rabbitmqUrl = process.env.RABBITMQ_URL;
-console.log({ rabbitmqUrl })
 
 let connection, channel;
 

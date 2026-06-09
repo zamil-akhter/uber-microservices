@@ -1,5 +1,6 @@
 const captainService = require('../services/captain.service');
 const BlacklistToken = require('../models/blacklistToken.model');
+const { subscribeToQueue } = require('../services/rabbit');
 
 const signup = async (req, res) => {
   try {
@@ -106,5 +107,10 @@ const getCaptainProfile = async (req, res) => {
     });
   }
 };
+
+subscribeToQueue("ride_created", (data) => {
+  console.log("[TCL] --------- ~ data --------->>>>  ", JSON.parse(data))
+
+});
 
 module.exports = { signup, login, logout, getCaptainProfile };

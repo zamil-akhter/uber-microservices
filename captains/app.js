@@ -20,6 +20,7 @@ app.get("/health", (req, res) => {
   });
 });
 
+
 // Mounting captain routes
 app.use("/api/captains", captainRoutes);
 
