@@ -1,10 +1,16 @@
 const express = require('express');
 const userRoutes = require('./routes/user.routes');
+const { connectRabbitMq } = require("./services/rabbit");
 
 const app = express();
 
 // Middleware
 app.use(express.json());
+
+connectRabbitMq().catch((error) => {
+  console.error("[Users Service] Failed to connect to RabbitMQ:", error);
+  process.exit(1);
+}); 
 
 // Basic health check endpoint
 app.get('/health', (req, res) => {
