@@ -7,7 +7,6 @@ const BlacklistToken = require('../models/blacklistToken.model');
 const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
-
     if (!fullName || !email || !password) {
       return res.status(400).json({
         success: false,

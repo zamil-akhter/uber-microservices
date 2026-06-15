@@ -1,9 +1,9 @@
-const dotenv = require('dotenv');
-const app = require('./app');
-const { connectDB } = require('./dbs/db');
+const dotenv = require("dotenv");
 
-// Load environment variables
 dotenv.config();
+
+const app = require("./app");
+const { connectDB } = require("./dbs/db");
 
 const PORT = process.env.PORT || 3001;
 

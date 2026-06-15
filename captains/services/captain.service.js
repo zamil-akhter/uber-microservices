@@ -24,7 +24,7 @@ exports.loginCaptain = async ({ email, password }) => {
     throw new Error("Invalid email or password");
   }
 
-  const token = jwt.sign({ _id: captain._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign({ _id: captain._id, role: "captain" }, process.env.JWT_SECRET, { expiresIn: "1h" });
   return { captain, token };
 };
 
