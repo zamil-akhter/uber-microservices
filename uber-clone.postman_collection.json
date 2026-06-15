@@ -1,0 +1,349 @@
+{
+    "info": {
+        "_postman_id": "30585631-89ce-4dcd-9a4e-e7fc7389928f",
+        "name": "uber-microservices",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "38170326"
+    },
+    "item": [
+        {
+            "name": "users",
+            "item": [
+                {
+                    "name": "signup",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "type": "text",
+                                    "key": "{\n    \"fullName\" : \"Zamil Akhter\",\n    \"email\" : \"zamilakhter@yopmail.com\",\n    \"password\" : \"Secure@123\"\n}",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base}}/api/users/signup",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "signup"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "login",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "type": "text",
+                                    "key": "{\n    \"email\" : \"zamilakhter@yopmail.com\",\n    \"password\" : \"Secure@123\"\n}",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base}}/api/users/login",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTdhYWQxMjU2MmM0ODliZmQzODYiLCJpYXQiOjE3ODE1MjQ1MzgsImV4cCI6MTc4MTUyODEzOH0.TLodJmv4egQWGQ-x6efP585TtTf9KvE1NfAuZ5wguEg"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base}}/api/users/profile",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "profile"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTdhYWQxMjU2MmM0ODliZmQzODYiLCJpYXQiOjE3ODE1MjQ1MzgsImV4cCI6MTc4MTUyODEzOH0.TLodJmv4egQWGQ-x6efP585TtTf9KvE1NfAuZ5wguEg"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base}}/api/users/logout",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "logout"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "captains",
+            "item": [
+                {
+                    "name": "signup",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"fullName\": \"John Doe\",\r\n    \"email\": \"zamil.captains@uber.com\",\r\n    \"password\": \"securepassword\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base}}/api/captains/signup",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "captains",
+                                "signup"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "login",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"email\": \"john.captains@uber.com\",\r\n    \"password\": \"securepassword\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base}}/api/captains/login",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "captains",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "profile",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTI1NzMxODc2YmRmYWI1YjM2ZDQ1YWEiLCJpYXQiOjE3ODA4MzkzMjIsImV4cCI6MTc4MDg0MjkyMn0.Nz531nE_gILLr80Ly0qPRL_z9mBq9PEF6HZEOZaeejw"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base}}/api/captains/profile",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "captains",
+                                "profile"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "poll new ride",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTliNTRmZDM0YTQ0NGZiZTdlOWQiLCJpYXQiOjE3ODE1MjUxNzksImV4cCI6MTc4MTUyODc3OX0.eFryiMl595csJwDQb-rYOQvOKtEYg3xih4IZNNtU2zM"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "type": "text",
+                                    "key": "{\n    \"email\" : \"zamilcaptain@yopmail.com\",\n    \"password\" : \"Secure@123\"\n}",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base}}/api/captains/poll-new-ride",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "captains",
+                                "poll-new-ride"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTdhYWQxMjU2MmM0ODliZmQzODYiLCJpYXQiOjE3ODE1MjQ1MzgsImV4cCI6MTc4MTUyODEzOH0.TLodJmv4egQWGQ-x6efP585TtTf9KvE1NfAuZ5wguEg"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base}}/api/captains/logout",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "captains",
+                                "logout"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "rides",
+            "item": [
+                {
+                    "name": "create ride",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTdhYWQxMjU2MmM0ODliZmQzODYiLCJpYXQiOjE3ODE1MjUzMjUsImV4cCI6MTc4MTUyODkyNX0.OoK6dPMforfYnoRRh5qN4bTY7Deo1qlEv28Qn58gJ8s"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"pickup\": \"Hiii\",\r\n    \"destination\": \"demo\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base}}/api/rides/create-ride",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "rides",
+                                "create-ride"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "accept ride",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer $CAPTAIN_TOKEN"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base}}/api/rides/accept-ride/6a2feba3ba8f9ac1e2427d8d",
+                            "host": [
+                                "{{base}}"
+                            ],
+                            "path": [
+                                "api",
+                                "rides",
+                                "accept-ride",
+                                "6a2feba3ba8f9ac1e2427d8d"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base",
+            "value": ""
+        }
+    ]
+}
