@@ -13,16 +13,16 @@
                     "name": "signup",
                     "request": {
                         "method": "POST",
-                        "header": [],
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
                         "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "type": "text",
-                                    "key": "{\n    \"fullName\" : \"Zamil Akhter\",\n    \"email\" : \"zamilakhter@yopmail.com\",\n    \"password\" : \"Secure@123\"\n}",
-                                    "value": ""
-                                }
-                            ]
+                            "mode": "raw",
+                            "raw": "{\r\n    \"fullName\" : \"Zamil Akhter\",\r\n    \"email\" : \"zamilakhter.rk@gmail.com\",\r\n    \"password\":\"securePass\"\r\n}"
                         },
                         "url": {
                             "raw": "{{base}}/api/users/signup",
@@ -42,16 +42,16 @@
                     "name": "login",
                     "request": {
                         "method": "POST",
-                        "header": [],
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
                         "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "type": "text",
-                                    "key": "{\n    \"email\" : \"zamilakhter@yopmail.com\",\n    \"password\" : \"Secure@123\"\n}",
-                                    "value": ""
-                                }
-                            ]
+                            "mode": "raw",
+                            "raw": "{\r\n    \"email\" : \"zamilakhter.rk@gmail.com\",\r\n    \"password\":\"securePass\"\r\n}"
                         },
                         "url": {
                             "raw": "{{base}}/api/users/login",
@@ -74,7 +74,7 @@
                         "header": [
                             {
                                 "key": "Authorization",
-                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTdhYWQxMjU2MmM0ODliZmQzODYiLCJpYXQiOjE3ODE1MjQ1MzgsImV4cCI6MTc4MTUyODEzOH0.TLodJmv4egQWGQ-x6efP585TtTf9KvE1NfAuZ5wguEg"
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTMwNDUzMGQ3MmJjOTVmMWE3NmY3ZDYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc4MTU0ODQ4NCwiZXhwIjoxNzgxNTUyMDg0fQ._60psGmHvHrJrFNxwADWYjWqMDqhU_sqlHT7DYuDK98"
                             }
                         ],
                         "url": {
@@ -98,7 +98,7 @@
                         "header": [
                             {
                                 "key": "Authorization",
-                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTdhYWQxMjU2MmM0ODliZmQzODYiLCJpYXQiOjE3ODE1MjQ1MzgsImV4cCI6MTc4MTUyODEzOH0.TLodJmv4egQWGQ-x6efP585TtTf9KvE1NfAuZ5wguEg"
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTMwNDUzMGQ3MmJjOTVmMWE3NmY3ZDYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc4MTU0ODQwNSwiZXhwIjoxNzgxNTUyMDA1fQ.LolLgp2u_IF_VhASATdrt81OJ2J60qxJvE1h0Zf6pQk"
                             }
                         ],
                         "url": {
@@ -161,7 +161,7 @@
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"email\": \"john.captains@uber.com\",\r\n    \"password\": \"securepassword\"\r\n}",
+                            "raw": "{\r\n    \"email\": \"zamil.captains@uber.com\",\r\n    \"password\": \"securepassword\"\r\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -219,7 +219,7 @@
                         "header": [
                             {
                                 "key": "Authorization",
-                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTliNTRmZDM0YTQ0NGZiZTdlOWQiLCJpYXQiOjE3ODE1MjUxNzksImV4cCI6MTc4MTUyODc3OX0.eFryiMl595csJwDQb-rYOQvOKtEYg3xih4IZNNtU2zM"
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTI1ODMzOTc2YmRmYWI1YjM2ZDQ1YWMiLCJyb2xlIjoiY2FwdGFpbiIsImlhdCI6MTc4MTU0OTEzOCwiZXhwIjoxNzgxNTUyNzM4fQ.mo7f9hKnYz-QeVY9gpVSzYMD3kNHQZ7hT4ADgWecxfA"
                             }
                         ],
                         "body": {
@@ -282,7 +282,7 @@
                         "header": [
                             {
                                 "key": "Authorization",
-                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTJmZTdhYWQxMjU2MmM0ODliZmQzODYiLCJpYXQiOjE3ODE1MjUzMjUsImV4cCI6MTc4MTUyODkyNX0.OoK6dPMforfYnoRRh5qN4bTY7Deo1qlEv28Qn58gJ8s"
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTMwNDUzMGQ3MmJjOTVmMWE3NmY3ZDYiLCJyb2xlIjoidXNlciIsImlhdCI6MTc4MTU0ODQ4NCwiZXhwIjoxNzgxNTUyMDg0fQ._60psGmHvHrJrFNxwADWYjWqMDqhU_sqlHT7DYuDK98"
                             }
                         ],
                         "body": {
@@ -315,7 +315,7 @@
                         "header": [
                             {
                                 "key": "Authorization",
-                                "value": "Bearer $CAPTAIN_TOKEN"
+                                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTI1ODMzOTc2YmRmYWI1YjM2ZDQ1YWMiLCJyb2xlIjoiY2FwdGFpbiIsImlhdCI6MTc4MTU0OTEzOCwiZXhwIjoxNzgxNTUyNzM4fQ.mo7f9hKnYz-QeVY9gpVSzYMD3kNHQZ7hT4ADgWecxfA"
                             },
                             {
                                 "key": "Content-Type",
@@ -323,7 +323,7 @@
                             }
                         ],
                         "url": {
-                            "raw": "{{base}}/api/rides/accept-ride/6a2feba3ba8f9ac1e2427d8d",
+                            "raw": "{{base}}/api/rides/accept-ride/6a3047675f837ae464928669",
                             "host": [
                                 "{{base}}"
                             ],
@@ -331,7 +331,7 @@
                                 "api",
                                 "rides",
                                 "accept-ride",
-                                "6a2feba3ba8f9ac1e2427d8d"
+                                "6a3047675f837ae464928669"
                             ]
                         }
                     },
