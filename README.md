@@ -77,3 +77,10 @@ npm run dev
 
 - If `npm run dev` fails, make sure `nodemon` is installed and the `dev` script exists in the service's `package.json`.
 - If the gateway returns `Cannot GET /profile`, verify the gateway route and proxy configuration in `gateway/app.js`.
+
+## API Testing
+
+Import `uber-clone.postman_collection.json` into Postman to explore all endpoints.
+
+Set these environment variables in Postman:
+- `BASE_URL` — e.g. `http://localhost:3000`
