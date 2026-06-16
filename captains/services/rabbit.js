@@ -47,4 +47,4 @@ async function publishToQueue(queueName, data) {
   });
 }
 
-module.exports = { connectRabbitMq, subscribeToQueue, publishToQueue };s
+module.exports = { connectRabbitMq, subscribeToQueue, publishToQueue };
