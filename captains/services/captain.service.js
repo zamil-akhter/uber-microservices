@@ -2,7 +2,10 @@ const Captain = require('../models/captain.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-exports.registerCaptain = async ({ fullName, email, password }) => {
+/**
+ * Service to register a new captain
+ */
+const registerCaptain = async ({ fullName, email, password }) => {
   const existingCaptain = await Captain.findOne({ email });
   if (existingCaptain) {
     throw new Error("Captain already exists with this email");
@@ -13,7 +16,10 @@ exports.registerCaptain = async ({ fullName, email, password }) => {
   return captain;
 };
 
-exports.loginCaptain = async ({ email, password }) => {
+/**
+ * Service to authenticate and login a captain
+ */
+const loginCaptain = async ({ email, password }) => {
   const captain = await Captain.findOne({ email }).select("+password");
   if (!captain) {
     throw new Error("Invalid email or password");
@@ -28,4 +34,21 @@ exports.loginCaptain = async ({ email, password }) => {
   return { captain, token };
 };
 
+/**
+ * Service to get captain by ID
+ */
+const getCaptainById = async ({ captainId }) => {
+  if (!captainId) {
+    throw new Error("Captain ID is required");
+  }
 
+  const captain = await Captain.findById(captainId);
+  if (!captain) {
+    throw new Error("Captain not found");
+  }
+
+  return captain;
+};
+
+
+module.exports = { registerCaptain, loginCaptain, getCaptainById };

@@ -3,29 +3,42 @@ const User = require('../models/user.model');
 const BlacklistToken = require('../models/blacklistToken.model');
 
 /**
- * Middleware to authenticate requests using JWT tokens
+ * Utility to validate Authorization header
+ */
+const getTokenFromHeader = (authHeader) => {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return null;
+  }
+  return authHeader.split(" ")[1];
+};
+
+/**
+ * Middleware to authenticate user requests using JWT tokens
  */
 const authenticateUser = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token = getTokenFromHeader(req.headers.authorization);
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!token) {
       return res.status(401).json({
         success: false,
         message: "Access denied. No token provided.",
       });
     }
 
-    const token = authHeader.split(" ")[1];
-    const isBlacklisted = await BlacklistToken.find({ token });
-    if (isBlacklisted.length) {
+    // Check if token is blacklisted
+    const isBlacklisted = await BlacklistToken.findOne({ token });
+    if (isBlacklisted) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized",
+        message: "Token has been revoked.",
       });
     }
 
+    // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Fetch user from database
     const user = await User.findById(decoded._id);
     if (!user) {
       return res.status(401).json({
@@ -40,7 +53,7 @@ const authenticateUser = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "Invalid or expired token.",
+      message: error.message === "jwt expired" ? "Token has expired." : "Invalid or expired token.",
     });
   }
 };

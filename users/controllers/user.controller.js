@@ -56,7 +56,7 @@ const login = async (req, res) => {
         id: user._id,
         fullName: user.fullName,
         email: user.email,
-        token: token,
+        token,
       },
     });
   } catch (error) {
@@ -67,9 +67,13 @@ const login = async (req, res) => {
   }
 };
 
+/**
+ * Controller to handle User Logout
+ */
 const logout = async (req, res) => {
   try {
     const token = req.token;
+
     if (!token) {
       return res.status(400).json({
         success: false,

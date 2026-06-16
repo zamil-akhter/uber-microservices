@@ -1,46 +1,88 @@
 const jwt = require("jsonwebtoken");
-const axios = require("axios");
 
-const authUserMiddleware = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+/**
+ * Utility to validate Authorization header
+ */
+const getTokenFromHeader = (authHeader) => {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return null;
   }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  return authHeader.split(" ")[1];
+};
 
-    if (decoded.role !== "user") {
-      return res.status(401).json({ message: "Unauthorized : not a user" });
+/**
+ * Middleware to authenticate user requests using JWT tokens
+ */
+const authenticateUser = async (req, res, next) => {
+  try {
+    const token = getTokenFromHeader(req.headers.authorization);
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Access denied. No token provided.",
+      });
     }
 
-    const user = decoded;
-    req.user = user;
+    // Verify JWT
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Verify user role
+    if (decoded.role !== "user") {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden. User access required.",
+      });
+    }
+
+    req.user = decoded;
+    req.token = token;
     next();
-  } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message === "jwt expired" ? "Token has expired." : "Invalid or expired token.",
+    });
   }
 };
 
-const authCaptainMiddleware = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+/**
+ * Middleware to authenticate captain requests using JWT tokens
+ */
+const authenticateCaptain = async (req, res, next) => {
   try {
+    const token = getTokenFromHeader(req.headers.authorization);
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Access denied. No token provided.",
+      });
+    }
+
+    // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    // Verify captain role
     if (decoded.role !== "captain") {
-      return res.status(401).json({ message: "Unauthorized : not a captain" });
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden. Captain access required.",
+      });
     }
 
     req.captain = decoded;
+    req.token = token;
     next();
-  } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: error.message === "jwt expired" ? "Token has expired." : "Invalid or expired token.",
+    });
   }
 };
 
 module.exports = {
-  authUserMiddleware,
-  authCaptainMiddleware,
+  authenticateUser,
+  authenticateCaptain,
 };

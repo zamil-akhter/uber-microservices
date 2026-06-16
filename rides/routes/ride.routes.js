@@ -1,11 +1,12 @@
 const express = require("express");
-const { authUserMiddleware, authCaptainMiddleware } = require("../middlewares/auth.middleware");
+const { authenticateUser, authenticateCaptain } = require("../middlewares/auth.middleware");
 const router = express.Router();
 const rideController = require("../controllers/ride.controller");
 
+// User routes
+router.post("/create-ride", authenticateUser, rideController.createRide);
 
-
-router.post("/create-ride", authUserMiddleware, rideController.createRide);
-router.patch("/accept-ride/:rideId", authCaptainMiddleware, rideController.acceptRide);
+// Captain routes
+router.patch("/accept-ride/:rideId", authenticateCaptain, rideController.acceptRide);
 
 module.exports = router;

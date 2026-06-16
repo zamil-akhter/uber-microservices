@@ -1,6 +1,30 @@
 const Ride = require("../models/ride.model");
 
-exports.acceptRide = async ({ captainId, rideId }) => {
+/**
+ * Service to create a new ride
+ */
+const createRide = async ({ userId, pickup, destination }) => {
+  if (!userId) {
+    throw new Error("User ID is required");
+  }
+  if (!pickup || !destination) {
+    throw new Error("Pickup and destination are required");
+  }
+
+  const newRide = await Ride.create({
+    user: userId,
+    pickup,
+    destination,
+    status: "requested",
+  });
+
+  return newRide;
+};
+
+/**
+ * Service to accept a ride
+ */
+const acceptRide = async ({ captainId, rideId }) => {
   if (!rideId) {
     throw new Error("Ride ID is required");
   }
@@ -26,8 +50,23 @@ exports.acceptRide = async ({ captainId, rideId }) => {
     { new: true }
   );
 
-  return {
-    message: `Ride ${rideId} accepted successfully`,
-    ride: updatedRide,
-  };
+  return updatedRide;
 };
+
+/**
+ * Service to get a ride by ID
+ */
+const getRideById = async ({ rideId }) => {
+  if (!rideId) {
+    throw new Error("Ride ID is required");
+  }
+
+  const ride = await Ride.findById(rideId).populate("user").populate("captain");
+  if (!ride) {
+    throw new Error("Ride not found");
+  }
+
+  return ride;
+};
+
+module.exports = { createRide, acceptRide, getRideById };
