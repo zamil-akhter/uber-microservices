@@ -1,69 +1,50 @@
-require("dotenv").config();
 const amqp = require("amqplib");
-
-const rabbitmqUrl = process.env.RABBITMQ_URL;
-if (!rabbitmqUrl) {
-  throw new Error("[Captains Service] Missing RABBITMQ_URL environment variable");
-}
 
 let connection, channel;
 
 async function connectRabbitMq() {
-  if (channel) {
-    return channel;
-  }
+  if (channel) return;
 
-  if (!connection) {
-    connection = await amqp.connect(rabbitmqUrl);
-    connection.on("error", (err) => {
-      console.error("[Captains Service] RabbitMQ connection error:", err);
-      connection = null;
-      channel = null;
-    });
-    connection.on("close", () => {
-      console.warn("[Captains Service] RabbitMQ connection closed");
-      connection = null;
-      channel = null;
-    });
-  }
-
+  connection = await amqp.connect(process.env.RABBITMQ_URL);
   channel = await connection.createChannel();
-  console.log("[Captains Service] Connected to RabbitMQ at", rabbitmqUrl);
-  return channel;
+  channel.prefetch(1);
+
+  connection.on("error", (err) => {
+    console.error("[Captains Service] RabbitMQ connection error:", err);
+    connection = null;
+    channel = null;
+  });
+
+  connection.on("close", () => {
+    console.warn("[Captains Service] RabbitMQ connection closed");
+    connection = null;
+    channel = null;
+  });
+
+  console.log("[Captains Service] Connected to RabbitMQ successfully");
 }
 
 async function subscribeToQueue(queueName, callback) {
-  if (!queueName) {
-    throw new Error("subscribeToQueue requires a queueName");
-  }
-  if (typeof callback !== "function") {
-    throw new Error("subscribeToQueue requires a callback function");
-  }
-
-  const channel = await connectRabbitMq();
+  if (!channel) await connectRabbitMq();
   await channel.assertQueue(queueName, { durable: true });
-  await channel.consume(queueName, (message) => {
-    if (!message) {
-      return;
+  channel.consume(queueName, async (message) => {
+    if (!message) return;
+    try {
+      await callback(JSON.parse(message.content.toString()));
+      channel.ack(message);
+    } catch (err) {
+      console.error("Processing failed:", err);
+      channel.nack(message, false, true);
     }
-
-    callback(message.content.toString());
-    channel.ack(message);
   });
 }
 
 async function publishToQueue(queueName, data) {
-  if (!queueName) {
-    throw new Error("publishToQueue requires a queueName");
-  }
-
-  const channel = await connectRabbitMq();
+  if (!channel) await connectRabbitMq();
   await channel.assertQueue(queueName, { durable: true });
-  channel.sendToQueue(queueName, Buffer.from(data));
+  channel.sendToQueue(queueName, Buffer.from(JSON.stringify(data)), {
+    persistent: true,
+  });
 }
 
-module.exports = {
-  subscribeToQueue,
-  publishToQueue,
-  connectRabbitMq,
-};
+module.exports = { connectRabbitMq, subscribeToQueue, publishToQueue };s
