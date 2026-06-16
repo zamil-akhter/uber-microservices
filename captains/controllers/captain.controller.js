@@ -1,45 +1,6 @@
 const captainService = require('../services/captain.service');
 const BlacklistToken = require('../models/blacklistToken.model');
-const { subscribeToQueue } = require('../services/rabbit');
-
-const pendingRidePolls = [];
-const rideBuffer = [];
-
-/**
- * Helper to deliver rides from buffer to pending polls
- */
-function deliverRideToPendingPolls(ride) {
-  if (!pendingRidePolls.length) {
-    return false;
-  }
-
-  const pending = pendingRidePolls.splice(0, pendingRidePolls.length);
-  pending.forEach(({ res, timeout }) => {
-    clearTimeout(timeout);
-    if (!res.headersSent) {
-      res.status(200).json({
-        success: true,
-        message: "New ride available",
-        data: ride,
-      });
-    }
-  });
-
-  return true;
-}
-
-// Subscribe to ride events from RabbitMQ
-subscribeToQueue('ride_created', (data) => {
-  const ride = typeof data === 'string' ? JSON.parse(data) : data;
-
-  if (!deliverRideToPendingPolls(ride)) {
-    rideBuffer.push(ride);
-    // Keep only last 10 rides in buffer
-    if (rideBuffer.length > 10) {
-      rideBuffer.shift();
-    }
-  }
-});
+const { waitingCaptains, rideBuffer } = require('../listeners/rideListener');
 
 /**
  * Controller to handle Captain Signup (Registration)
@@ -159,53 +120,41 @@ const getCaptainProfile = async (req, res) => {
   }
 };
 
-/**
- * Controller to poll for new rides (long-polling)
- * Keeps connection open until a new ride is available or timeout occurs
- */
-const pollNewRide = (req, res) => {
-  try {
-    // Check if there are buffered rides
-    if (rideBuffer.length) {
-      const ride = rideBuffer.shift();
-      return res.status(200).json({
-        success: true,
-        message: "New ride available",
-        data: ride,
-      });
-    }
+const getNewRide = (req, res) => {
+  const captainId = req.captain._id.toString();
 
-    // Set timeout for long polling (30 seconds)
-    const timeout = setTimeout(() => {
-      const index = pendingRidePolls.findIndex((item) => item.res === res);
-      if (index !== -1) {
-        pendingRidePolls.splice(index, 1);
-      }
-      if (!res.headersSent) {
-        res.status(200).json({
-          success: false,
-          message: "No new rides available",
-        });
-      }
-    }, 30000);
-
-    // Add to pending polls
-    pendingRidePolls.push({ res, timeout });
-
-    // Handle client disconnect
-    req.on('close', () => {
-      const index = pendingRidePolls.findIndex((item) => item.res === res);
-      if (index !== -1) {
-        clearTimeout(pendingRidePolls[index].timeout);
-        pendingRidePolls.splice(index, 1);
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message || "Error polling for rides",
+  // If a ride is already buffered, return it immediately.
+  if (rideBuffer.length > 0) {
+    const ride = rideBuffer.shift();
+    return res.status(200).json({
+      success: true,
+      message: 'New ride available',
+      data: ride,
     });
   }
+
+  const timeout = setTimeout(() => {
+    const entry = waitingCaptains.get(captainId);
+    if (!entry) {
+      return;
+    }
+
+    waitingCaptains.delete(captainId);
+    if (!res.headersSent && !res.writableEnded) {
+      res.status(204).json({ message: 'No ride available' });
+    }
+  }, 30000);
+
+  waitingCaptains.set(captainId, { res, timeout });
+
+  // clean up if captain disconnects
+  req.on('close', () => {
+    const entry = waitingCaptains.get(captainId);
+    if (entry) {
+      clearTimeout(entry.timeout);
+      waitingCaptains.delete(captainId);
+    }
+  });
 };
 
-module.exports = { signup, login, logout, getCaptainProfile, pollNewRide };
+module.exports = { signup, login, logout, getCaptainProfile, getNewRide };

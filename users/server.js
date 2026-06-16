@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const { connectRabbitMQ } = require("./services/rabbit");
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3001;
 const startServer = async () => {
   try {
     await connectDB();
+    await connectRabbitMQ();
     app.listen(PORT, () => {
       console.log(`[Users Service] Running on http://localhost:${PORT}`);
     });

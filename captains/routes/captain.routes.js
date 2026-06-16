@@ -11,7 +11,7 @@ router.post('/login', captainController.login);
 // Protected routes
 router.post('/logout', authenticateCaptain, captainController.logout);
 router.get('/profile', authenticateCaptain, captainController.getCaptainProfile);
-router.get('/poll-new-ride', authenticateCaptain, captainController.pollNewRide);
+router.get('/poll-new-ride', authenticateCaptain, captainController.getNewRide);
 
 
 

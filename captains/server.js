@@ -1,3 +1,4 @@
+const { startRideListener } = require('./listeners/rideListener');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 3002;
 const startServer = async () => {
   try {
     await connectDB();
+    await startRideListener();
     app.listen(PORT, () => {
       console.log(`[Captains Service] Running on http://localhost:${PORT}`);
     });

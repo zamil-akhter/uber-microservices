@@ -1,6 +1,5 @@
 const express = require("express");
 const rideRoutes = require("./routes/ride.routes");
-const { connectRabbitMq } = require("./services/rabbit");
 const app = express();
 
 // Middleware
@@ -13,12 +12,6 @@ app.get("/health", (req, res) => {
     service: "rides-service",
     timestamp: new Date().toISOString(),
   });
-});
-
-
-connectRabbitMq().catch((err) => {
-  console.error("Failed to connect to RabbitMQ:", err);
-  process.exit(1);
 });
 
 // Mounting ride routes

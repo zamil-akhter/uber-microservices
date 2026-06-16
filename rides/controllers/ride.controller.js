@@ -1,7 +1,8 @@
 const rideModel = require("../models/ride.model");
-const { publishToQueue } = require("../services/rabbit");
+const { getChannel } = require("../services/rabbit");
 const rideService = require("../services/ride.service");
 
+const NEW_RIDE_QUEUE = 'new_ride';
 /**
  * Controller to create a new ride
  */
@@ -23,8 +24,15 @@ const createRide = async (req, res) => {
       destination,
     });
 
-    // Publish to RabbitMQ for captains to receive
-    publishToQueue("ride_created", JSON.stringify(newRide));
+    // publish to RabbitMQ — fire and forget
+    const channel = getChannel();
+    channel.sendToQueue(
+      NEW_RIDE_QUEUE,
+      Buffer.from(JSON.stringify(newRide)),
+      { persistent: true }
+    );
+
+    console.log('Ride published to queue:', newRide._id);
 
     res.status(201).json({
       success: true,
